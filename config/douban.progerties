@@ -1,3 +1,3 @@
 douban.movie.search.api=http://api.douban.com/v2/movie/search?q=
-douban.movie.subject.api=http://api.douban.com//v2/movie/subject/
+douban.movie.subject.api=http://api.douban.com/v2/movie/subject/
 douban.movie.minute.request.maxTime=10

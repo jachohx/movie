@@ -23,9 +23,9 @@ public class DoubanMovie extends DaoEntity {
 	private String pubdates;
 	private int year;
 	private String subtype;
-	private List<DoubanCast> casts;
-	private List<DoubanCast> directors;
-	private List<String> aka;
+	private List<DoubanCast> casts = new ArrayList<DoubanCast>(4);;
+	private List<DoubanCast> directors = new ArrayList<DoubanCast>(4);;
+	private List<String> aka = new ArrayList<String>();
 	private String summary;
 	
 	public DoubanMovie(){
@@ -118,6 +118,8 @@ public class DoubanMovie extends DaoEntity {
 		this.casts = casts;
 	}
 	public void setCastsStr(String casts) {
+		if (casts == null || "".equals(casts))
+			return;
 		String[] castsArray = casts.split(SPLIT_MARK);
 		DoubanCastDAO dao = (DoubanCastDAO)SpringUtils.getInstance().getBean("doubanCastDAO");
 		for (String s : castsArray) {
@@ -131,9 +133,6 @@ public class DoubanMovie extends DaoEntity {
 		return StringUtils.join(castIds(casts), SPLIT_MARK);
 	}
 	public void addCases(DoubanCast cast) {
-		if (casts == null) {
-			casts = new ArrayList<DoubanCast>(4);
-		}
 		casts.add(cast);
 	}
 	public List<DoubanCast> getDirectors() {
@@ -143,6 +142,8 @@ public class DoubanMovie extends DaoEntity {
 		this.directors = directors;
 	}
 	public void setDirectorsStr(String directors) {
+		if (directors == null || "".equals(directors))
+			return;
 		String[] directorsArray = directors.split(SPLIT_MARK);
 		DoubanCastDAO dao = (DoubanCastDAO)SpringUtils.getInstance().getBean("doubanCastDAO");
 		for (String s : directorsArray) {
@@ -157,9 +158,6 @@ public class DoubanMovie extends DaoEntity {
 	}
 	
 	public void addDirectors(DoubanCast director) {
-		if (directors == null) {
-			directors = new ArrayList<DoubanCast>(4);
-		}
 		directors.add(director);
 	}
 	public List<String> getAka() {
@@ -179,9 +177,6 @@ public class DoubanMovie extends DaoEntity {
 		}
 	}
 	public void addAka(String aka) {
-		if (this.aka == null) {
-			this.aka = new ArrayList<String>();
-		}
 		this.aka.add(aka);
 	}
 	public String getSummary() {

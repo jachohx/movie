@@ -41,10 +41,16 @@ public class DoubanMovieRunner implements IRunner {
 		setUp();
 		List<PublicHDDouban> list = publicHDDoubanDAO.pager(1, 4);
 		for (PublicHDDouban phdd : list) {
-			DoubanMovie dm = service.getSubject(phdd.getName(), phdd.getYear());
-			phdd.setDoubanId(dm.getId());
+			int did = DoubanMovieService.CRAW_ERROR_STATUS;
+			try {
+				DoubanMovie dm = service.getSubject(phdd.getName(), phdd.getYear());
+				did = dm.getId();
+			} catch (Exception e) {
+				log.error("phd name:" + phdd.getName() + ",year:" + phdd.getYear() + ",error" + e.getMessage());
+			}
+			phdd.setDoubanId(did);
 			publicHDDoubanDAO.update(phdd);
-			log.info("update publichd douban phdId:" + phdd.getPhdId() + ",doubanId:" + dm.getId());
+			log.info("update publichd douban phdId:" + phdd.getPhdId() + ",doubanId:" + did);
 		}
 	}
 	

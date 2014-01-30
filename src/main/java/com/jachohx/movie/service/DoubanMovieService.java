@@ -117,7 +117,11 @@ public class DoubanMovieService {
 			JSONObject jo = jsonArray.getJSONObject(i);
 			dm = jsonToDoubanMovie(jo);
 			if (title.equalsIgnoreCase(dm.getOriginalTitle()) && dm.getYear() == year){
-				getSubject(dm);
+				try {
+					getSubject(dm);
+				} catch (Exception e) {
+					log.error("getSubject doubanid:" + dm.getId() + ",title:" + title + ",year:" +year + ",error:"+e.getMessage());
+				}
 				save(dm);
 				return dm;
 			}
@@ -134,30 +138,38 @@ public class DoubanMovieService {
 		//cast
 		JSONArray ja = json.getJSONArray(SUBJECTS_CAST);
 		for (int i = 0; i < ja.length(); i++) {
-			DoubanCast cast = new DoubanCast();
-			JSONObject jo = ja.getJSONObject(i);
-			cast.setId(NumberUtils.toInt(jo.getString(SUBJECTS_CAST_ID)));
-			cast.setName(getJsonString(jo, SUBJECTS_CAST_NAME));
-			cast.setAlt(getJsonString(jo, SUBJECTS_CAST_ALT));
-			JSONObject avatars = jo.getJSONObject(SUBJECTS_CAST_AVATARS); 
-			cast.setAvatarSmall(getJsonString(avatars, SUBJECTS_CAST_AVATARS_SMALL));
-			cast.setAvatarMedium(getJsonString(avatars, SUBJECTS_CAST_AVATARS_MEDIUM));
-			cast.setAvatarLarge(getJsonString(avatars, SUBJECTS_CAST_AVATARS_LARGE));
-			dm.addCases(cast);
+			try {
+				DoubanCast cast = new DoubanCast();
+				JSONObject jo = ja.getJSONObject(i);
+				cast.setId(NumberUtils.toInt(getJsonString(jo, SUBJECTS_CAST_ID), 0));
+				cast.setName(getJsonString(jo, SUBJECTS_CAST_NAME));
+				cast.setAlt(getJsonString(jo, SUBJECTS_CAST_ALT));
+				JSONObject avatars = jo.getJSONObject(SUBJECTS_CAST_AVATARS); 
+				cast.setAvatarSmall(getJsonString(avatars, SUBJECTS_CAST_AVATARS_SMALL));
+				cast.setAvatarMedium(getJsonString(avatars, SUBJECTS_CAST_AVATARS_MEDIUM));
+				cast.setAvatarLarge(getJsonString(avatars, SUBJECTS_CAST_AVATARS_LARGE));
+				dm.addCases(cast);
+			} catch (Exception e) {
+				log.error("cast douban id:" + dm.getId() + ",error:" +e.getMessage());
+			}
 		}
 		//directors
 		ja = json.getJSONArray(SUBJECTS_DIRECTOR);
 		for (int i = 0; i < ja.length(); i++) {
-			DoubanCast director = new DoubanCast();
-			JSONObject jo = ja.getJSONObject(i);
-			director.setId(NumberUtils.toInt(jo.getString(SUBJECTS_DIRECTOR_ID)));
-			director.setName(getJsonString(jo, SUBJECTS_DIRECTOR_NAME));
-			director.setAlt(getJsonString(jo, SUBJECTS_DIRECTOR_ALT));
-			JSONObject avatars = jo.getJSONObject(SUBJECTS_DIRECTOR_AVATARS); 
-			director.setAvatarSmall(getJsonString(avatars, SUBJECTS_DIRECTOR_AVATARS_SMALL));
-			director.setAvatarMedium(getJsonString(avatars, SUBJECTS_DIRECTOR_AVATARS_MEDIUM));
-			director.setAvatarLarge(getJsonString(avatars, SUBJECTS_DIRECTOR_AVATARS_LARGE));
-			dm.addDirectors(director);
+			try {
+				DoubanCast director = new DoubanCast();
+				JSONObject jo = ja.getJSONObject(i);
+				director.setId(NumberUtils.toInt(getJsonString(jo, SUBJECTS_DIRECTOR_ID), 0));
+				director.setName(getJsonString(jo, SUBJECTS_DIRECTOR_NAME));
+				director.setAlt(getJsonString(jo, SUBJECTS_DIRECTOR_ALT));
+				JSONObject avatars = jo.getJSONObject(SUBJECTS_DIRECTOR_AVATARS); 
+				director.setAvatarSmall(getJsonString(avatars, SUBJECTS_DIRECTOR_AVATARS_SMALL));
+				director.setAvatarMedium(getJsonString(avatars, SUBJECTS_DIRECTOR_AVATARS_MEDIUM));
+				director.setAvatarLarge(getJsonString(avatars, SUBJECTS_DIRECTOR_AVATARS_LARGE));
+				dm.addDirectors(director);
+			} catch (Exception e) {
+				log.error("director douban id:" + dm.getId() + ",error:" +e.getMessage());
+			}
 		}
 		//akaÓÖÃû
 		JSONArray aka = json.getJSONArray(SUBJECTS_AKA);
