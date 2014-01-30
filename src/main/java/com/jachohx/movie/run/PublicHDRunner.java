@@ -12,12 +12,8 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 
 import com.jachohx.movie.dao.PublicHDDAO;
-import com.jachohx.movie.dao.PublicHDDoubanDAO;
-import com.jachohx.movie.entity.DoubanMovie;
-import com.jachohx.movie.entity.MovieInfo;
 import com.jachohx.movie.entity.PublicHD;
-import com.jachohx.movie.entity.PublicHDDouban;
-import com.jachohx.movie.service.DoubanMovieService;
+import com.jachohx.movie.service.PublicHDDoubanService;
 import com.jachohx.movie.util.SpringUtils;
 import com.jachohx.movie.util.TimeUtils;
 import com.jachohx.movie.web.PublicHDPageFetcher;
@@ -28,8 +24,7 @@ public class PublicHDRunner implements IRunner{
 	Properties prop;
 	PrintWriter writer;
 	PublicHDDAO dao;
-	DoubanMovieService doubanMovieService;
-	PublicHDDoubanDAO publicHDDoubanDAO;
+	PublicHDDoubanService publicHDDoubanService;
 	
 	int pageSize;
 	int pageLimit = 0;
@@ -56,8 +51,7 @@ public class PublicHDRunner implements IRunner{
 			init = Boolean.parseBoolean(String.valueOf(prop.get("movies.list.init")));
 			initPageLimit = Integer.parseInt(String.valueOf(prop.get("movies.list.init.pageLimit")));
 			dao = (PublicHDDAO)SpringUtils.getInstance().getBean("publicHDDAO");
-			doubanMovieService = (DoubanMovieService)SpringUtils.getInstance().getBean("doubanMovieService");
-			publicHDDoubanDAO = (PublicHDDoubanDAO)SpringUtils.getInstance().getBean("publicHDDoubanDAO");
+			publicHDDoubanService = (PublicHDDoubanService)SpringUtils.getInstance().getBean("publicHDDoubanService");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -123,15 +117,6 @@ public class PublicHDRunner implements IRunner{
     	log.info("model:" + model);
     	List<PublicHD> results = fetcher.crawl(url, model);
     	log.info("size:" + results.size());
-//    	for (PublicHD phd : results){
-//    		PublicHD _phd = dao.getPublicHD4Md5(phd.getMd5());
-//    		if (_phd != null && _phd.getId() > 0) {
-//    			System.out.println(phd.getUrl() + "\t is exist");
-//    			continue;
-//    		}
-//    		dao.create(phd);
-//    		outPublicHD(phd);
-//    	}
     	return results;
     }
 	
@@ -140,29 +125,14 @@ public class PublicHDRunner implements IRunner{
 	 * @param phds
 	 * @return
 	 */
-	private int insert2DB(List<PublicHD> phds) {
+	protected int insert2DB(List<PublicHD> phds) {
 		int size = 0;
 		for (PublicHD phd : phds){ 
 			if (dao.isExist(phd)) {
 				log.info(phd.getUrl() + "\t is exist");
     			continue;
 			}
-			if (dao.create(phd)) {
-				MovieInfo mi = PublicHDPageFetcher.getMovieInfo(phd.getName());
-				if (mi == null)
-					continue;
-				String name = mi.getName();
-				int year = mi.getYear();
-				int doubanId = -1;
-				try {
-					DoubanMovie dm = doubanMovieService.getSubject(name, year);
-					if (dm == null)
-						doubanId = 0;
-					else doubanId = dm.getId();
-				} catch (Exception e) {
-					log.error("id:" + phd.getId() + "error:" + e.getMessage());
-				}
-				publicHDDoubanDAO.insert(new PublicHDDouban(phd.getId(), doubanId, name, year));
+			if (dao.create(phd) && publicHDDoubanService.create(phd)) {
 				size ++;
 			}
 		}
@@ -170,34 +140,4 @@ public class PublicHDRunner implements IRunner{
 		return size;
 	}
 	
-//	private void outPublicHD(PublicHD phd) {
-//		int index = 1;
-//		writer.println(index++ + "\t" + phd.getCategory());
-//		writer.println(index++ + "\t" + phd.getName());
-//		writer.println(index++ + "\t" + phd.getUrl());
-//		writer.println(index++ + "\t" + phd.getMd5());
-//		writer.println(index++ + "\t" + phd.getMagnet());
-//		writer.println(index++ + "\t" + phd.getTorrent());
-//		writer.println(index++ + "\t" + phd.getAddDate());
-//		writer.println(index++ + "\t" + phd.getSeeds());
-//		writer.println(index++ + "\t" + phd.getLeechers());
-//		writer.println(index++ + "\t" + phd.getUploader());
-//		writer.println(index++ + "\t" + phd.getSize());
-//		writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-//		writer.flush();
-//	}
-	
-    /*private void printPublicHD(PublicHD phd) {
-    	int index = 1;
-		System.out.println(index++ + "\t" + phd.getCategory());
-		System.out.println(index++ + "\t" + phd.getName());
-		System.out.println(index++ + "\t" + phd.getMagnet());
-		System.out.println(index++ + "\t" + phd.getTorrent());
-		System.out.println(index++ + "\t" + phd.getAddDate());
-		System.out.println(index++ + "\t" + phd.getSeeds());
-		System.out.println(index++ + "\t" + phd.getLeechers());
-		System.out.println(index++ + "\t" + phd.getUploader());
-		System.out.println(index++ + "\t" + phd.getSize());
-		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-    }*/
 }

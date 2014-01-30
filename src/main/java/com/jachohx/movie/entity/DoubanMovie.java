@@ -27,6 +27,12 @@ public class DoubanMovie extends DaoEntity {
 	private List<DoubanCast> directors;
 	private List<String> aka;
 	private String summary;
+	
+	public DoubanMovie(){
+	}
+	public DoubanMovie(int id){
+		this.id = id;
+	}
 
 	public int getId() {
 		return id;

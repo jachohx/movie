@@ -20,8 +20,14 @@
     <bean id="doubanCastDAO" class="com.jachohx.movie.dao.DoubanCastDAO" init-method="init">
         <property name="dataSource" ref="dataSource"/>
     </bean>
+    <bean id="publicHDService" class="com.jachohx.movie.service.PublicHDService">
+        <property name="publicHDDAO" ref="publicHDDAO"/>
+    </bean>
     <bean id="publicHDDoubanDAO" class="com.jachohx.movie.dao.PublicHDDoubanDAO" init-method="init">
         <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <bean id="publicHDDoubanService" class="com.jachohx.movie.service.PublicHDDoubanService">
+        <property name="publicHDDoubanDAO" ref="publicHDDoubanDAO"/>
     </bean>
     <bean id="doubanMovieService" class="com.jachohx.movie.service.DoubanMovieService" init-method="init">
     	<property name="doubanMovieDAO" ref="doubanMovieDAO"/>

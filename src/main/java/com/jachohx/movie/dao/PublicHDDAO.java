@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -70,5 +71,10 @@ public class PublicHDDAO extends AbstractDAO<PublicHD>{
 		}, keyHolder);
 		phd.setId(keyHolder.getKey().intValue());
 		return row > 0 ? true : false;
+	}
+	
+	public List<PublicHD> listAll() {
+		String sql = "Select * from " + tableName;
+		return list(sql);
 	}
 }

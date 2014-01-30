@@ -219,4 +219,12 @@ public abstract class AbstractDAO<T extends DaoEntity> {
 		}
 		return queryOption(entity, keyList);
 	}
+	
+	public List<T> list(String sql){
+		return simpleJdbcTemplate.query(sql, objectRowMapper);
+	}
+	
+	public List<T> list(String sql, Map<String, Object> params){
+		return simpleJdbcTemplate.query(sql, objectRowMapper, params);
+	}
 }

@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.Properties;
 
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.http.ParseException;
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -15,6 +17,7 @@ import com.jachohx.movie.entity.DoubanMovie;
 import com.jachohx.movie.util.HttpClientUtils;
 
 public class DoubanMovieService {
+	private static Logger log = Logger.getLogger(DoubanMovieService.class);
 	
 	final static String SUBJECTS_ID = "id";
 	final static String SUBJECTS_TITLE = "title";
@@ -59,10 +62,17 @@ public class DoubanMovieService {
 	static String MOVIE_SUBJECT_API; 
 	private DoubanMovieDAO doubanMovieDAO;
 	private DoubanCastDAO doubanCastDAO;
+	static int REQUES_MAXTIME;
+	static int requestTime;
+	
+	public final static int DEFAULT_STATUS = -1;
+	public final static int CRAW_ERROR_STATUS = -2;
+	public final static int NULL_STATUS = -3;
 	public void init() throws IOException {
 		prop.load(new FileReader("config/douban.progerties"));
 		MOVIE_SEARCH_API = prop.getProperty("douban.movie.search.api");
 		MOVIE_SUBJECT_API = prop.getProperty("douban.movie.subject.api");
+		REQUES_MAXTIME = NumberUtils.toInt(prop.getProperty("douban.movie.minute.request.maxTime"));
 	}
 	
 	public void setDoubanMovieDAO(DoubanMovieDAO doubanMovieDAO) {
@@ -71,6 +81,18 @@ public class DoubanMovieService {
 	public void setDoubanCastDAO(DoubanCastDAO doubanCastDAO) {
 		this.doubanCastDAO = doubanCastDAO;
 	}
+	
+	private String request(String url) throws ParseException, IOException {
+		if (requestTime < REQUES_MAXTIME) {
+			requestTime ++;
+			log.info("request url:" + url);
+			return HttpClientUtils.getResponse(url);
+		}
+		return null;
+	}
+	
+	public final DoubanMovie DEFAULT_DOUBAN = new DoubanMovie(CRAW_ERROR_STATUS);
+	public final DoubanMovie NULL_DOUBAN = new DoubanMovie(NULL_STATUS);
 
 	/**
 	 * get douban movie subject
@@ -85,7 +107,10 @@ public class DoubanMovieService {
 		if (dm != null)
 			return dm;
 		
-		String jsonStr = HttpClientUtils.getResponse(MOVIE_SEARCH_API + title);
+		String jsonStr = request(MOVIE_SEARCH_API + title);
+		if (jsonStr == null) {
+			return DEFAULT_DOUBAN;
+		}
 		JSONObject json = new JSONObject(jsonStr);
 		JSONArray jsonArray = json.getJSONArray("subjects");
 		for (int i = 0; i < jsonArray.length(); i++) {
@@ -97,11 +122,14 @@ public class DoubanMovieService {
 				return dm;
 			}
 		}
-		return null;
+		return NULL_DOUBAN;
 	}
 	
 	private DoubanMovie getSubject(DoubanMovie dm) throws IOException {
-		String jsonStr = HttpClientUtils.getResponse(MOVIE_SUBJECT_API + dm.getId());
+		String jsonStr = request(MOVIE_SUBJECT_API + dm.getId());
+		if (jsonStr == null) {
+			return dm;
+		}
 		JSONObject json = new JSONObject(jsonStr);
 		//cast
 		JSONArray ja = json.getJSONArray(SUBJECTS_CAST);

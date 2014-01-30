@@ -61,4 +61,9 @@ public class PublicHDDouban extends DaoEntity{
 		return pks;
 	}
 	
+	@Override
+	public String toString(){
+		return "phdId:" + phdId + "\tdoubanId:" + doubanId + "\tname:" + name + "\tyear:" + year;
+	}
+	
 }
