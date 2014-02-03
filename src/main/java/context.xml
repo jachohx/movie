@@ -48,4 +48,24 @@
         <property name="password" value="${database.password}"/>
     </bean>
     
+    <bean id="runnersMap" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<!-- must -->
+				<entry key="main">
+					<bean class="com.jachohx.movie.run.PublicHDRunner"></bean>
+				</entry>
+				<entry key="publichd">
+					<bean class="com.jachohx.movie.run.PublicHDRunner"></bean>
+				</entry>
+				<entry key="douban_movie">
+					<bean class="com.jachohx.movie.run.PublicHDDoubanRunner"></bean>
+				</entry>
+				<entry key="publichd_douban">
+					<bean class="com.jachohx.movie.run.PublicHDDoubanRunner"></bean>
+				</entry>
+			</map>
+		</constructor-arg>
+    </bean>
+    
 </beans>

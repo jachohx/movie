@@ -81,5 +81,16 @@ public class PageFetcherTest{
     	System.out.println("name:" + info.getName() + "\tyear:" + info.getYear());
     	Assert.assertEquals(info.getName(), "The Crash Reel LIMITED DOCU");
     	Assert.assertEquals(info.getYear(), 0);
+    	
+    	info =PublicHDPageFetcher.getMovieInfo("Pacific Rim [2013] 1080p BluRay QEBSx AAC51 FASM[ETRG]");
+    	System.out.println("name:" + info.getName() + "\tyear:" + info.getYear());
+    	Assert.assertEquals(info.getName(), "Pacific Rim");
+    	Assert.assertEquals(info.getYear(), 2013);
     }
+    
+    @Test
+    public void filterTitle() {
+    	String title = "Pacific Rim (2013) 1080p BluRay X264 QEBSx AAC51 FASM[ETRG]";
+		System.out.println(title.replaceAll("\\[|\\(|\\]|\\)|(x264)|(X264)", ""));
+	}
 }

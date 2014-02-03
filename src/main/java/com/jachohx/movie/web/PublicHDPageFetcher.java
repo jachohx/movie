@@ -22,6 +22,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlTableCell;
 import com.jachohx.movie.entity.MovieInfo;
 import com.jachohx.movie.entity.PublicHD;
+import com.jachohx.movie.util.PropertiesUtils;
 import com.jachohx.movie.util.TimeUtils;
 import com.jachohx.movie.util.UrlUtils;
 
@@ -125,6 +126,21 @@ public class PublicHDPageFetcher implements IFetcher<PublicHD> {
 	}
 	
 	static Pattern pattern = Pattern.compile("\\d+[p]{0,1}");
+	static String TITLE_FILTER_REGEX;
+	
+	private static String filterTitle(String title) {
+		if ("".equals(TITLE_FILTER_REGEX)) {
+			return title;
+		}
+		if (TITLE_FILTER_REGEX == null) {
+			try {
+				TITLE_FILTER_REGEX = PropertiesUtils.getProperty("config/publichd.properties", "movies.title.filter.regex");
+			} catch (Exception e) {
+				TITLE_FILTER_REGEX =  "";
+			}
+		}
+		return title.replaceAll(TITLE_FILTER_REGEX, "");
+	}
 	/**
 	 * 从标题里分析出名字与年份。标题是格式是 name + year + ...
 	 * @param title
@@ -133,6 +149,7 @@ public class PublicHDPageFetcher implements IFetcher<PublicHD> {
 	public static MovieInfo getMovieInfo(String title) {
 		MovieInfo info = null;
 		
+		title = filterTitle(title);
 		String _titleLower = title.toLowerCase();
 		Matcher matcher = pattern.matcher(_titleLower);
 		String yearStr = null;

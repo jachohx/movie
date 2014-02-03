@@ -19,7 +19,7 @@ public class DoubanMovieServiceTest {
 //		System.out.println(dm);
 //		DoubanMovie dm = service.getSubject("Inland Empire", 2006);
 //		System.out.println(dm);
-//		DoubanMovie dm = service.getSubject("Darkroom", 2013);
-//		System.out.println(dm);
+		DoubanMovie dm = service.getSubject("Darkroom", 2013);
+		System.out.println(dm);
 	}
 }
