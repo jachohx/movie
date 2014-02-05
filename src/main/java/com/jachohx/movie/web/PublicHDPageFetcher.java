@@ -125,7 +125,7 @@ public class PublicHDPageFetcher implements IFetcher<PublicHD> {
 		return results;
 	}
 	
-	static Pattern pattern = Pattern.compile("\\d+[p]{0,1}");
+	static Pattern pattern = Pattern.compile("(720|1080)p|(([\\[|\\(]){0,1}\\d{4}([\\]|\\)]){0,1})");
 	static String TITLE_FILTER_REGEX;
 	
 	private static String filterTitle(String title) {
@@ -149,30 +149,36 @@ public class PublicHDPageFetcher implements IFetcher<PublicHD> {
 	public static MovieInfo getMovieInfo(String title) {
 		MovieInfo info = null;
 		
-		title = filterTitle(title);
 		String _titleLower = title.toLowerCase();
 		Matcher matcher = pattern.matcher(_titleLower);
 		String yearStr = null;
 		String str = null;
 		while(matcher.find()) {
 			str = matcher.group();
+			//720p,1080p前的也当作是片名
 			if ("720p".equals(str) | "1080p".equals(str))
 				break;
+			str = str.replaceAll("\\[|\\]|\\(|\\)", "");
+			//年份只能是4位数
+			if (str.length() != 4)
+				continue;
 			yearStr = str;
 		}
 		int year = 0;
 		String titleSpliteStr = null;
-		if (yearStr == null) {
+		if (yearStr == null) {//年份为0则看最后一个正则内容，比如720P,1080P
 			titleSpliteStr = str;
 			year = 0;
 		} else {
 			titleSpliteStr = yearStr;
 			year = NumberUtils.toInt(yearStr, 0);
 		}
+		if (titleSpliteStr == null)
+			return new MovieInfo(title, 0);
 		int titleEndIndex = title.lastIndexOf(titleSpliteStr);
 		if (titleEndIndex == -1)
-			return null;
-		String movieTitle = title.substring(0, titleEndIndex).trim();
+			return new MovieInfo(title, 0);
+		String movieTitle = filterTitle(title.substring(0, titleEndIndex)).trim();
 		info = new MovieInfo();
 		info.setName(movieTitle);
 		info.setYear(year);

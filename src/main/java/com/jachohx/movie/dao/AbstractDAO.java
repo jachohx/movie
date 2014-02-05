@@ -21,7 +21,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 import com.jachohx.movie.entity.DaoEntity;
 
 public abstract class AbstractDAO<T extends DaoEntity> {
-	private static Logger log = Logger.getLogger(AbstractDAO.class);
+	private static Logger log = Logger.getLogger("dao");
 	
 	protected SimpleJdbcTemplate simpleJdbcTemplate;
 	protected JdbcTemplate jdbcTemplate;
@@ -221,10 +221,17 @@ public abstract class AbstractDAO<T extends DaoEntity> {
 	}
 	
 	public List<T> list(String sql){
+		log.info(sql);
 		return simpleJdbcTemplate.query(sql, objectRowMapper);
 	}
 	
 	public List<T> list(String sql, Map<String, Object> params){
+		log.info(sql + "[" + params + "]");
 		return simpleJdbcTemplate.query(sql, objectRowMapper, params);
+	}
+	
+	public List<Map<String,Object>> queryForList(String sql) {
+		log.info(sql);
+		return simpleJdbcTemplate.queryForList(sql);
 	}
 }

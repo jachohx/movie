@@ -12,6 +12,11 @@ import com.jachohx.movie.util.SpringUtils;
 
 public class DoubanMovie extends DaoEntity {
 	
+	public final static int DEFAULT_STATUS = -1;
+	public final static int CRAW_ERROR_STATUS = -2;
+	public final static int NULL_STATUS = -3;
+	public final static int TEMP_STATUS = -4;
+	
 	private int id;
 	private String title;
 	private String originalTitle;

@@ -3,6 +3,12 @@ package com.jachohx.movie.entity;
 public class MovieInfo {
 	private String name;
 	private int year;
+	public MovieInfo(){
+	}
+	public MovieInfo(String name, int year){
+		this.name = name;
+		this.year = year;
+	}
 	public String getName() {
 		return name;
 	}

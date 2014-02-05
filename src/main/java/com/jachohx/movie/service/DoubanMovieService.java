@@ -4,6 +4,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.http.ParseException;
 import org.apache.log4j.Logger;
@@ -65,9 +66,7 @@ public class DoubanMovieService {
 	static int REQUES_MAXTIME;
 	static int requestTime;
 	
-	public final static int DEFAULT_STATUS = -1;
-	public final static int CRAW_ERROR_STATUS = -2;
-	public final static int NULL_STATUS = -3;
+	
 	public void init() throws IOException {
 		prop.load(new FileReader("config/douban.progerties"));
 		MOVIE_SEARCH_API = prop.getProperty("douban.movie.search.api");
@@ -91,8 +90,8 @@ public class DoubanMovieService {
 		return null;
 	}
 	
-	public final DoubanMovie DEFAULT_DOUBAN = new DoubanMovie(CRAW_ERROR_STATUS);
-	public final DoubanMovie NULL_DOUBAN = new DoubanMovie(NULL_STATUS);
+	public final DoubanMovie DEFAULT_DOUBAN = new DoubanMovie(DoubanMovie.CRAW_ERROR_STATUS);
+	public final DoubanMovie NULL_DOUBAN = new DoubanMovie(DoubanMovie.NULL_STATUS);
 
 	/**
 	 * get douban movie subject
@@ -116,11 +115,11 @@ public class DoubanMovieService {
 		for (int i = 0; i < jsonArray.length(); i++) {
 			JSONObject jo = jsonArray.getJSONObject(i);
 			dm = jsonToDoubanMovie(jo);
-			if (title.equalsIgnoreCase(dm.getOriginalTitle()) && dm.getYear() == year){
+			if (title.equalsIgnoreCase(dm.getOriginalTitle()) && (dm.getYear() == year || year == 0)){
 				try {
 					getSubject(dm);
 				} catch (Exception e) {
-					log.error("getSubject doubanid:" + dm.getId() + ",title:" + title + ",year:" +year + ",error:"+e.getMessage());
+					log.error("getSubject doubanid:" + dm.getId() + ",title:" + title + ",year:" +year + ",error:\r\n" + ExceptionUtils.getStackTrace(e));
 				}
 				save(dm);
 				return dm;
@@ -214,10 +213,18 @@ public class DoubanMovieService {
 	}
 	
 	private DoubanMovie getSujectFromDB(String title, int year) {
+		if (year == 0)
+			return getSujectFromDB(title);
 		DoubanMovie dm = new DoubanMovie();
 		dm.setOriginalTitle(title);
 		dm.setYear(year);
 		return doubanMovieDAO.select(dm, SUBJECTS_ENGLISH_TITLE_COLUMN, SUBJECTS_YEAR_COLUMN);
+	}
+	
+	private DoubanMovie getSujectFromDB(String title) {
+		DoubanMovie dm = new DoubanMovie();
+		dm.setOriginalTitle(title);
+		return doubanMovieDAO.select(dm, SUBJECTS_ENGLISH_TITLE_COLUMN);
 	}
 	
 	private boolean save(DoubanMovie dm) {

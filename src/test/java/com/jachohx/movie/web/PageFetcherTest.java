@@ -5,6 +5,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -86,6 +88,21 @@ public class PageFetcherTest{
     	System.out.println("name:" + info.getName() + "\tyear:" + info.getYear());
     	Assert.assertEquals(info.getName(), "Pacific Rim");
     	Assert.assertEquals(info.getYear(), 2013);
+    	
+    	info =PublicHDPageFetcher.getMovieInfo("Casino 1995 900p BDRip x264 DTS Multisubs NoT PublicHD");
+    	System.out.println("name:" + info.getName() + "\tyear:" + info.getYear());
+    	Assert.assertEquals(info.getName(), "Casino");
+    	Assert.assertEquals(info.getYear(), 1995);
+    	
+    	info =PublicHDPageFetcher.getMovieInfo("The Grey (RC) (2012) 1080p MKV AAC 15 MultiSubs SilenceM");
+    	System.out.println("name:" + info.getName() + "\tyear:" + info.getYear());
+    	Assert.assertEquals(info.getName(), "The Grey");
+    	Assert.assertEquals(info.getYear(), 2012);
+    	
+    	info =PublicHDPageFetcher.getMovieInfo("2012 [2009] BluRay 1080p HD [aZZa]");
+    	System.out.println("name:" + info.getName() + "\tyear:" + info.getYear());
+    	Assert.assertEquals(info.getName(), "2012");
+    	Assert.assertEquals(info.getYear(), 2009);
     }
     
     @Test
@@ -93,4 +110,16 @@ public class PageFetcherTest{
     	String title = "Pacific Rim (2013) 1080p BluRay X264 QEBSx AAC51 FASM[ETRG]";
 		System.out.println(title.replaceAll("\\[|\\(|\\]|\\)|(x264)|(X264)", ""));
 	}
+    
+    @Test
+    public void regex() {
+    	Pattern pattern  = PublicHDPageFetcher.pattern;
+    	String title = "R I P D  [2013] BDRip 1080p x264 DTS multi extras HighCode".toLowerCase();
+    	Matcher matcher = pattern.matcher(title);
+    	while(matcher.find()) {
+    		String str = matcher.group();
+    		str = str.replaceAll("\\[|\\]|\\(|\\)", "");
+			System.out.println(str);
+    	}
+    }
 }

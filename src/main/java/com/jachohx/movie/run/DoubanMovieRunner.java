@@ -28,7 +28,7 @@ public class DoubanMovieRunner implements IRunner {
 		setUp();
 		List<PublicHDDouban> list = publicHDDoubanDAO.pager(1, 4);
 		for (PublicHDDouban phdd : list) {
-			int did = DoubanMovieService.CRAW_ERROR_STATUS;
+			int did = DoubanMovie.CRAW_ERROR_STATUS;
 			try {
 				DoubanMovie dm = service.getSubject(phdd.getName(), phdd.getYear());
 				did = dm.getId();
