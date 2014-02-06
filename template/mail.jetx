@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+</head>
+#set(String btnClass="text-decoration: none;display:inline-block;padding:0 6px;margin-bottom:0;font-size:10.5px;line-height:20px;text-align:center;vertical-align:middle;cursor:pointer;color:#333333;text-shadow:0 1px 1px rgba(255, 255, 255, 0.75);background-color:#f5f5f5;background-image:linear-gradient(to bottom, #ffffff, #e6e6e6);background-repeat:repeat-x;border-color:#e6e6e6 #e6e6e6 #bfbfbf;border-color:rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);border:1px solid #cccccc;*border:0;border-bottom-color:#b3b3b3;;box-shadow:inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);-webkit-border-radius: 4px;-moz-border-radius: 4px;")
+#set(String tdClass="border-left: 1px solid #dddddd;padding: 8px; line-height: 20px; text-align: left; vertical-align: top;")
+<body style='font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;font-size: 14px;line-height: 20px;color: #333;'>
+<h1>Matched</h1>
+<table style="border: 1px solid #dddddd;border-collapse: separate;border-left: 0;border-radius: 4px; width: 100%; margin-bottom: 20px;background-color: transparent; display: table;border-spacing: 0;">
+  <tr>
+    <td style="border-top-left-radius: 4px; background-color: #f9f9f9; ${tdClass}">NO</td>
+    <td style="background-color: #f9f9f9; ${tdClass}">ID</td>
+    <td style="background-color: #f9f9f9; ${tdClass}">Chinese</td>
+    <td style="background-color: #f9f9f9; ${tdClass}">Enlish</td>
+    <td style="background-color: #f9f9f9; ${tdClass}">Year</td>
+    <td style="background-color: #f9f9f9; ${tdClass}">Down</td>
+  </tr>
+  #for(PublicHDDouban pd: matched)
+  #set(DoubanMovie dm = pd.doubanMovie)
+  #set(PublicHD phd = pd.publicHD)
+  <tr>
+    <td style="${for.index % 2 == 0? 'background-color: #f9f9f9;':''} ${tdClass} border-top: 1px solid #dddddd;">${for.index}</td>
+    <td style="${for.index % 2 == 0? 'background-color: #f9f9f9;':''} ${tdClass} border-top: 1px solid #dddddd;">${phd.id}</td>
+    <td style="${for.index % 2 == 0? 'background-color: #f9f9f9;':''} ${tdClass} border-top: 1px solid #dddddd;"><a href="${dm.alt}" style="text-decoration: none;">${dm.title}</a></td>
+    <td style="${for.index % 2 == 0? 'background-color: #f9f9f9;':''} ${tdClass} border-top: 1px solid #dddddd;"><a href="http://publichd.se/${phd.url}" title="${phd.name}" title="${phd.name}" style="text-decoration: none;">${pd.name}</a></td>
+    <td style="${for.index % 2 == 0? 'background-color: #f9f9f9;':''} ${tdClass} border-top: 1px solid #dddddd;">${dm.year}</td>
+    <td style="${for.index % 2 == 0? 'background-color: #f9f9f9;':''} ${tdClass} border-top: 1px solid #dddddd;width: 50px;">
+	  <a href="${phd.magnet}" style="${btnClass}">m</a>
+	  <a href="${phd.torrent}" style="${btnClass}">t</a>
+    </td>
+  </tr>
+  #else
+  #end
+</table>
+<h1>Miss Match</h1>
+<table style="border: 1px solid #dddddd;border-collapse: separate;border-left: 0;border-radius: 4px; width: 100%; margin-bottom: 20px;background-color: transparent; display: table;border-spacing: 0;">
+  <tr>
+    <td style="border-top-left-radius: 4px; background-color: #f9f9f9; ${tdClass}">NO</td>
+    <td style="background-color: #f9f9f9; ${tdClass}">ID</td>
+    <td style="background-color: #f9f9f9; ${tdClass}">Enlish</td>
+    <td style="background-color: #f9f9f9; ${tdClass}">Year</td>
+    <td style="background-color: #f9f9f9; ${tdClass}">Down</td>
+  </tr>
+  #for(PublicHDDouban pd: missMatch)
+  #set(PublicHD phd = pd.publicHD)
+  <tr>
+    <td style="${for.index % 2 == 0? 'background-color: #f9f9f9;':''} ${tdClass} border-top: 1px solid #dddddd;">${for.index}</td>
+    <td style="${for.index % 2 == 0? 'background-color: #f9f9f9;':''} ${tdClass} border-top: 1px solid #dddddd;">${phd.id}</td>
+    <td style="${for.index % 2 == 0? 'background-color: #f9f9f9;':''} ${tdClass} border-top: 1px solid #dddddd;"><a href="http://publichd.se/${phd.url}" title="${phd.name}" title="${phd.name}" style="text-decoration: none;">${pd.name}</a></td>
+    <td style="${for.index % 2 == 0? 'background-color: #f9f9f9;':''} ${tdClass} border-top: 1px solid #dddddd;">${pd.year}</td>
+    <td style="${for.index % 2 == 0? 'background-color: #f9f9f9;':''} ${tdClass} border-top: 1px solid #dddddd;width: 50px;">
+	  <a href="${phd.magnet}" style="${btnClass}">m</a>
+	  <a href="${phd.torrent}" style="${btnClass}">t</a>
+    </td>
+  </tr>
+  #else
+  #end
+</table>
+<br/>
+</br/>
+
+</body>
+</html>

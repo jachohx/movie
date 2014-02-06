@@ -15,3 +15,5 @@ local.properties
 .loadpath
 result/**
 target/**
+mail*.html
+jdbc*.*

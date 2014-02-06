@@ -4,7 +4,7 @@ package com.jachohx.movie.service;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.jachohx.movie.entity.DoubanMovie;
+//import com.jachohx.movie.entity.DoubanMovie;
 import com.jachohx.movie.util.SpringUtils;
 
 public class DoubanMovieServiceTest {

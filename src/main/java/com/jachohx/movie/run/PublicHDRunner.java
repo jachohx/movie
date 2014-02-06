@@ -3,7 +3,6 @@ package com.jachohx.movie.run;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,14 +14,13 @@ import com.jachohx.movie.dao.PublicHDDAO;
 import com.jachohx.movie.entity.PublicHD;
 import com.jachohx.movie.service.PublicHDDoubanService;
 import com.jachohx.movie.util.SpringUtils;
-import com.jachohx.movie.util.TimeUtils;
 import com.jachohx.movie.web.PublicHDPageFetcher;
 
 public class PublicHDRunner implements IRunner{
 	private static Logger log = Logger.getLogger(PublicHDRunner.class);
 	PublicHDPageFetcher fetcher;
 	Properties prop;
-	PrintWriter writer;
+//	PrintWriter writer;
 	PublicHDDAO dao;
 	PublicHDDoubanService publicHDDoubanService;
 	
@@ -45,7 +43,6 @@ public class PublicHDRunner implements IRunner{
 		prop = new Properties();
 		try {
 			prop.load(new FileReader("config/publichd.properties"));
-			writer = new PrintWriter(prop.getProperty("movies.out.dir") + TimeUtils.getYMDHM());
 			pageSize = Integer.parseInt(String.valueOf(prop.get("movies.list.size")));
 			pageLimit = Integer.parseInt(String.valueOf(prop.get("movies.list.once.maxPageSize")));
 			init = Boolean.parseBoolean(String.valueOf(prop.get("movies.list.init")));
@@ -59,8 +56,6 @@ public class PublicHDRunner implements IRunner{
 		}
     }
 	public void tearDown(){
-		writer.flush();
-		writer.close();
     }
 	/**
 	 * 初始化网站的数据

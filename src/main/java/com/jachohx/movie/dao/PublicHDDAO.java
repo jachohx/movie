@@ -4,7 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -75,6 +78,16 @@ public class PublicHDDAO extends AbstractDAO<PublicHD>{
 	
 	public List<PublicHD> listAll() {
 		String sql = "Select * from " + tableName;
+		log.info("sql:" + sql);
 		return list(sql);
+	}
+	
+	public List<PublicHD> list(Date start, Date end) {
+		String sql = "SELECT * FROM " + tableName + " WHERE create_time BETWEEN :start and :end";
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("start", start);
+		params.put("end", end);
+		log.info("sql:" + sql + ",params:" + params);
+		return list(sql, params);
 	}
 }

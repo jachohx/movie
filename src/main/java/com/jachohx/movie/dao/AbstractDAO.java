@@ -21,7 +21,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 import com.jachohx.movie.entity.DaoEntity;
 
 public abstract class AbstractDAO<T extends DaoEntity> {
-	private static Logger log = Logger.getLogger("dao");
+	protected static Logger log = Logger.getLogger("dao");
 	
 	protected SimpleJdbcTemplate simpleJdbcTemplate;
 	protected JdbcTemplate jdbcTemplate;

@@ -33,6 +33,11 @@
     	<property name="doubanMovieDAO" ref="doubanMovieDAO"/>
     	<property name="doubanCastDAO" ref="doubanCastDAO"/>
     </bean>
+    <bean id="doubanPublicHDMatchService" class="com.jachohx.movie.service.DoubanPublicHDMatchService">
+    	<property name="publicHDDAO" ref="publicHDDAO"/>
+    	<property name="publicHDDoubanDAO" ref="publicHDDoubanDAO"/>
+    	<property name="doubanMovieDAO" ref="doubanMovieDAO"/>
+    </bean>
 	
     <!-- <bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
         <property name="driverClass" value="org.gjt.mm.mysql.Driver"/>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>jetbrick-template samples</title>
+</head>
+
+<body>
+
+#set(String hello = "hello")
+
+<div>Welcome, You are ${hello}!</div>
+<br/>
+
+<table border="1" width="600">
+  <tr>
+    <td>ID</td>
+    <td>书名</td>
+    <td>作者</td>
+    <td>价格</td>
+    <td>出版时间</td>
+  </tr>
+</table>
+
+<br/>
+</br/>
+
+</body>
+</html>

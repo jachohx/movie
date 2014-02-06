@@ -10,6 +10,8 @@ public class PublicHDDouban extends DaoEntity{
 	private int doubanId;
 	private String name;
 	private int year;
+	private DoubanMovie doubanMovie;
+	private PublicHD publicHD;
 	public PublicHDDouban(){
 	}
 	public PublicHDDouban(int phdId, int doubanId, String name, int year){
@@ -41,6 +43,18 @@ public class PublicHDDouban extends DaoEntity{
 	}
 	public void setYear(int year) {
 		this.year = year;
+	}
+	public DoubanMovie getDoubanMovie() {
+		return doubanMovie;
+	}
+	public void setDoubanMovie(DoubanMovie doubanMovie) {
+		this.doubanMovie = doubanMovie;
+	}
+	public PublicHD getPublicHD() {
+		return publicHD;
+	}
+	public void setPublicHD(PublicHD publicHD) {
+		this.publicHD = publicHD;
 	}
 	@Override
 	public Map<String, Object[]> getFieldInfo() {
