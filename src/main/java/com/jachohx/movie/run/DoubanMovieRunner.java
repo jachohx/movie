@@ -24,7 +24,7 @@ public class DoubanMovieRunner implements IRunner {
     }
 
 	@Override
-	public void run() throws Exception {
+	public void run(String[] args) throws Exception {
 		setUp();
 		List<PublicHDDouban> list = publicHDDoubanDAO.pager(1, 4);
 		for (PublicHDDouban phdd : list) {
@@ -43,6 +43,6 @@ public class DoubanMovieRunner implements IRunner {
 	
 	public static void main(String[] args) throws Exception {
 		DoubanMovieRunner runner = new DoubanMovieRunner();
-		runner.run();
+		runner.run(args);
 	}
 }

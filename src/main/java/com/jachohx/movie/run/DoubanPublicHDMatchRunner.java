@@ -1,11 +1,14 @@
 package com.jachohx.movie.run;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import com.jachohx.movie.entity.DoubanMovie;
-import com.jachohx.movie.entity.PublicHD;
 import com.jachohx.movie.entity.PublicHDDouban;
 import com.jachohx.movie.service.DoubanPublicHDMatchService;
+import com.jachohx.movie.util.JetEngineUtils;
+import com.jachohx.movie.util.MailUtils;
+import com.jachohx.movie.util.PropertiesUtils;
 import com.jachohx.movie.util.SpringUtils;
 
 public class DoubanPublicHDMatchRunner implements IRunner {
@@ -18,29 +21,24 @@ public class DoubanPublicHDMatchRunner implements IRunner {
     }
 
 	@Override
-	public void run() throws Exception {
+	public void run(String[] args) throws Exception {
 		setUp();
-		list();
+		match(args);
 	}
 	
-	public void list() throws Exception {
-		int ymd = 20140204;
-		List<PublicHDDouban> pds = (List<PublicHDDouban>)service.list(ymd).get("matched");
-		System.out.println(pds.size());
-		for (PublicHDDouban pd : pds) {
-			DoubanMovie dm = pd.getDoubanMovie();
-			PublicHD phd = pd.getPublicHD();
-			System.out.println("movie:" + dm.getTitle() + "\tpublicHD:" + phd.getName());
-		}
-		List<PublicHDDouban> mms = (List<PublicHDDouban>)service.list(ymd).get("missMatch");
-		for (PublicHDDouban pd : mms) {
-			PublicHD phd = pd.getPublicHD();
-			System.out.println("no match id:" + pd.getPhdId() + ",title:" + phd.getName() + ",name:" + pd.getName() + ",year:" + pd.getYear());
-		}
+	public void match(String[] args) throws Exception {
+		String subject = args[0];
+		int ymd = Integer.parseInt(args[1]);
+		Map<String, List<PublicHDDouban>> pds = service.list(ymd);
+		Map<String, Object> context = new HashMap<String, Object>(2);
+		context.put("matched", pds.get("matched"));
+		context.put("missMatch", pds.get("missMatch"));
+		String mail = JetEngineUtils.getTemplate("template/mail.jetx", context);
+		MailUtils.getInstance().sendMail(subject, mail, PropertiesUtils.getProperty("config/mail.properties", "mail.to"));
 	}
 	
 	public static void main(String[] args) throws Exception {
 		DoubanPublicHDMatchRunner runner = new DoubanPublicHDMatchRunner();
-		runner.run();
+		runner.run(args);
 	}
 }

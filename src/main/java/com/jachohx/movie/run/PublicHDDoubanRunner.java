@@ -26,7 +26,7 @@ public class PublicHDDoubanRunner implements IRunner {
     }
 
 	@Override
-	public void run() throws Exception {
+	public void run(String[] args) throws Exception {
 		setUp();
 //		init();
 		update();
@@ -65,6 +65,6 @@ public class PublicHDDoubanRunner implements IRunner {
 	
 	public static void main(String[] args) throws Exception {
 		PublicHDDoubanRunner runner = new PublicHDDoubanRunner();
-		runner.run();
+		runner.run(args);
 	}
 }

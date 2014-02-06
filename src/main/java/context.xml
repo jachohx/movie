@@ -69,6 +69,9 @@
 				<entry key="publichd_douban">
 					<bean class="com.jachohx.movie.run.PublicHDDoubanRunner"></bean>
 				</entry>
+				<entry key="daily_match">
+					<bean class="com.jachohx.movie.run.DoubanPublicHDMatchRunner"></bean>
+				</entry>
 			</map>
 		</constructor-arg>
     </bean>

@@ -2,6 +2,8 @@ package com.jachohx.movie.run;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import com.jachohx.movie.util.SpringUtils;
 
 public class MainRunner {
@@ -16,6 +18,9 @@ public class MainRunner {
     	if ((runner = runnersMap.get(runClass)) == null) {
     		throw new Exception("no [" + runClass + "] Runner Class");
     	}
-    	runner.run();
+    	if (args.length > 1) {
+    		args = ArrayUtils.subarray(args, 1, args.length);
+    	} else args = new String[]{};
+    	runner.run(args);
 	}
 }

@@ -30,7 +30,7 @@ public class PublicHDRunner implements IRunner{
 	int initPageLimit = 0;
 	
 	@Override
-	public void run() throws Exception{
+	public void run(String[] args) throws Exception{
 		setUp();
 		if (init) initData();
 		crawl();

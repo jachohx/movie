@@ -3,6 +3,7 @@ package com.jachohx.movie.service;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +20,7 @@ import com.jachohx.movie.entity.PublicHD;
 import com.jachohx.movie.entity.PublicHDDouban;
 import com.jachohx.movie.util.JetEngineUtils;
 import com.jachohx.movie.util.MailUtils;
+import com.jachohx.movie.util.PropertiesUtils;
 import com.jachohx.movie.util.SpringUtils;
 
 public class DoubanPublicHDServiceTest {
@@ -60,15 +62,15 @@ public class DoubanPublicHDServiceTest {
 		System.out.println("completed! file:" + file.getAbsolutePath());
 	}
 	
-	@Test
-	public void mail() throws EmailException, MessagingException {
+//	@Test
+	public void mail() throws EmailException, MessagingException, IOException {
 		int ymd = 20140204;
 		Map<String, List<PublicHDDouban>> pds = service.list(ymd);
 		Map<String, Object> context = new HashMap<String, Object>(2);
 		context.put("matched", pds.get("matched"));
 		context.put("missMatch", pds.get("missMatch"));
 		String mail = JetEngineUtils.getTemplate("template/mail.jetx", context);
-		MailUtils.getInstance().sendMail("mail.20140204", mail, "huang9370@163.com");
+		MailUtils.getInstance().sendMail("mail.20140204", mail, PropertiesUtils.getProperty("config/mail.properties", "mail.to"));
 		System.out.println("completed! send success!");
 	}
 }
