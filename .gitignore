@@ -16,6 +16,7 @@ local.properties
 result/**
 target/**
 mail*.*
+config_local/*
 #config/mail.properties
 #config/jdbc.properties
 src/sql/database_movie.sql
