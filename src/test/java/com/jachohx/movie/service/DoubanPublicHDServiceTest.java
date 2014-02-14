@@ -30,7 +30,7 @@ public class DoubanPublicHDServiceTest {
 		service = (DoubanPublicHDMatchService)SpringUtils.getInstance().getBean("doubanPublicHDMatchService");
 	}
 	
-	@Test
+//	@Test
 	public void list() throws Exception {
 		int ymd = 20140204;
 		List<PublicHDDouban> pds = (List<PublicHDDouban>)service.list(ymd).get("matched");
@@ -47,7 +47,7 @@ public class DoubanPublicHDServiceTest {
 		}
 	}
 	
-	@Test
+//	@Test
 	public void html() throws FileNotFoundException {
 		int ymd = 20140204;
 		Map<String, List<PublicHDDouban>> pds = service.list(ymd);

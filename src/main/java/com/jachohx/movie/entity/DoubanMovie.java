@@ -12,6 +12,10 @@ import com.jachohx.movie.util.SpringUtils;
 
 public class DoubanMovie extends DaoEntity {
 	
+	//database
+	public final static String SUBJECTS_ENGLISH_TITLE_COLUMN = "original_title";
+	public final static String SUBJECTS_YEAR_COLUMN = "year";
+	
 	public final static int DEFAULT_STATUS = -1;
 	public final static int CRAW_ERROR_STATUS = -2;
 	public final static int NULL_STATUS = -3;

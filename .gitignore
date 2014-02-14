@@ -18,3 +18,4 @@ target/**
 mail*.*
 config/mail.properties
 config/jdbc.properties
+src/sql/database_movie.sql

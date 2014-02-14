@@ -54,10 +54,6 @@ public class DoubanMovieService {
 	final static String SUBJECTS_AKA = "aka";
 	final static String SUBJECTS_SUMMARY = "summary";
 	
-	//database
-	final static String SUBJECTS_ENGLISH_TITLE_COLUMN = "original_title";
-	final static String SUBJECTS_YEAR_COLUMN = "year";
-	
 	static Properties prop = new Properties();;
 	static String MOVIE_SEARCH_API; 
 	static String MOVIE_SUBJECT_API; 
@@ -215,16 +211,13 @@ public class DoubanMovieService {
 	private DoubanMovie getSujectFromDB(String title, int year) {
 		if (year == 0)
 			return getSujectFromDB(title);
-		DoubanMovie dm = new DoubanMovie();
-		dm.setOriginalTitle(title);
-		dm.setYear(year);
-		return doubanMovieDAO.select(dm, SUBJECTS_ENGLISH_TITLE_COLUMN, SUBJECTS_YEAR_COLUMN);
+		return doubanMovieDAO.selectFromTitleAndYear(title, year);
 	}
 	
 	private DoubanMovie getSujectFromDB(String title) {
 		DoubanMovie dm = new DoubanMovie();
 		dm.setOriginalTitle(title);
-		return doubanMovieDAO.select(dm, SUBJECTS_ENGLISH_TITLE_COLUMN);
+		return doubanMovieDAO.select(dm, DoubanMovie.SUBJECTS_ENGLISH_TITLE_COLUMN);
 	}
 	
 	private boolean save(DoubanMovie dm) {

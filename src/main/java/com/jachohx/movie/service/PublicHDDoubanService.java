@@ -29,7 +29,11 @@ public class PublicHDDoubanService {
 			return false;
 		String name = mi.getName();
 		int year = mi.getYear();
-		return dao.insert(new PublicHDDouban(phd.getId(), DoubanMovie.DEFAULT_STATUS, name, year));
+		PublicHDDouban pd = new PublicHDDouban(phd.getId(), DoubanMovie.DEFAULT_STATUS, name, year);
+		PublicHDDouban _pd = dao.selectFromNameAndYear(pd.getName(), pd.getYear());
+		if (_pd != null && _pd.getDoubanId() > 0)
+			pd.setDoubanId(_pd.getDoubanId());
+		return dao.insert(pd);
 	}
 	public List<Map<String,Object>> listAll(int doubanId) {
 		return dao.listForOriTitle(doubanId);

@@ -31,4 +31,10 @@ public class PublicHDDoubanDAOTest {
 		}
 	}
 	
+	@Test
+	public void selectFromNameAndYear() {
+//		PublicHDDouban pd = dao.selectFromNameAndYear("Spike Island", 2012);
+//		System.out.println(pd);
+	}
+	
 }

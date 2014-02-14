@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -179,12 +180,15 @@ public abstract class AbstractDAO<T extends DaoEntity> {
 		for (String pk : keys) {
 			values.put(pk, fieldInfo.get(pk)[0]);
 		}
-		log.info(sql + "[" + values + "]");
-		//object
+		return select(sql, values);
+	}
+	public T select(String sql, Map<String, Object> values) {
 		T t = null;
+		log.info(sql + "[" + values + "]");
 		try {
 			t = simpleJdbcTemplate.queryForObject(sql, objectRowMapper, values);
 		} catch (EmptyResultDataAccessException e) {
+			log.error(ExceptionUtils.getStackTrace(e));
 			return null;
 		}
 		return t;
@@ -219,6 +223,7 @@ public abstract class AbstractDAO<T extends DaoEntity> {
 		}
 		return queryOption(entity, keyList);
 	}
+	
 	
 	public List<T> list(String sql){
 		log.info(sql);

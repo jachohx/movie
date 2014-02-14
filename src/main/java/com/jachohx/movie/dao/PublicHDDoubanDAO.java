@@ -1,5 +1,6 @@
 package com.jachohx.movie.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +33,19 @@ public class PublicHDDoubanDAO extends AbstractDAO<PublicHDDouban> {
 	public List<Map<String,Object>> listForOriTitle(int doubanId) {
 		String sql = "Select pd.*,p.name title from " + tableName + " pd," + PublicHDDAO.tableName + " p where pd.douban_id = " + doubanId + " and p.id = pd.phd_id order by phd_id desc";
 		return queryForList(sql);
+	}
+	
+	public PublicHDDouban selectFromNameAndYear(String name, int year) {
+		String sql = "select * " +
+				"FROM "+tableName+" " +
+				"WHERE " + 
+					PublicHDDouban.NAME_COLUMN + " = :"+PublicHDDouban.NAME_COLUMN+" AND " + 
+					PublicHDDouban.YEAR_COLUMN + " = :" + PublicHDDouban.YEAR_COLUMN + " " +
+				"order by " + PublicHDDouban.PHD_ID_COLUMN + " desc limit 1";
+		Map<String, Object> values = new HashMap<String, Object>(2);
+		values.put(PublicHDDouban.NAME_COLUMN, name);
+		values.put(PublicHDDouban.YEAR_COLUMN, year);
+		return select(sql, values);
 	}
 	
 }

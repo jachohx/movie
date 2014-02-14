@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import javax.mail.MessagingException;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
@@ -17,6 +18,7 @@ public class MailUtils {
 	String EMAIL_USERNAME;
 	String EMAIL_PASSWORD;
 	int EMAIL_SMTP_PORT;
+	boolean EMAIL_SSL_ON_CONNECT;
 	
 	static MailUtils mailUtils;
 	
@@ -54,9 +56,12 @@ public class MailUtils {
 	 */
 	public void sendMail(String subject, String content, File attach, String... mailaddress) throws EmailException, MessagingException {
 		HtmlEmail email = new HtmlEmail();
-		if (EMAIL_SMTP_PORT != 0)
-			email.setSmtpPort(EMAIL_SMTP_PORT);
-		email.setAuthenticator(new DefaultAuthenticator(EMAIL_USERNAME, EMAIL_PASSWORD));
+//		if (EMAIL_SMTP_PORT != 0)
+//			email.setSmtpPort(EMAIL_SMTP_PORT);
+		if (EMAIL_SSL_ON_CONNECT)
+			email.setSSLOnConnect(true);
+		if (EMAIL_USERNAME != null && !"".equals(EMAIL_USERNAME))
+			email.setAuthenticator(new DefaultAuthenticator(EMAIL_USERNAME, EMAIL_PASSWORD));
 		email.setHostName(EMAIL_HOST_NAME);
 		email.setCharset(EMAIL_CHARSET);
 		email.setFrom(EMAIL_FROM);
@@ -75,6 +80,8 @@ public class MailUtils {
 			EMAIL_CHARSET = PropertiesUtils.getProperty("config/mail.properties", "mail.charset");
 			EMAIL_USERNAME =PropertiesUtils.getProperty("config/mail.properties", "mail.username");
 			EMAIL_PASSWORD = PropertiesUtils.getProperty("config/mail.properties", "mail.password");
+			EMAIL_SMTP_PORT = NumberUtils.toInt(PropertiesUtils.getProperty("config/mail.properties", "mail.port"),0);
+			EMAIL_SSL_ON_CONNECT = Boolean.parseBoolean(PropertiesUtils.getProperty("config/mail.properties", "mail.ssh_on_connect"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

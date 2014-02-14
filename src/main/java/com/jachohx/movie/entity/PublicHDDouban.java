@@ -12,6 +12,11 @@ public class PublicHDDouban extends DaoEntity{
 	private int year;
 	private DoubanMovie doubanMovie;
 	private PublicHD publicHD;
+	
+	public final static String PHD_ID_COLUMN = "phd_id";
+	public final static String DOUBAN_ID_COLUMN = "douban_id";
+	public final static String NAME_COLUMN = "name";
+	public final static String YEAR_COLUMN = "year";
 	public PublicHDDouban(){
 	}
 	public PublicHDDouban(int phdId, int doubanId, String name, int year){
@@ -59,10 +64,10 @@ public class PublicHDDouban extends DaoEntity{
 	@Override
 	public Map<String, Object[]> getFieldInfo() {
 		Map<String, Object[]> map = new HashMap<String, Object[]>();
-		map.put("phd_id", new Object[] { phdId, "setPhdId", int.class });
-		map.put("douban_id", new Object[] { doubanId, "setDoubanId", int.class });
-		map.put("name", new Object[] { name, "setName", String.class });
-		map.put("year", new Object[] { year, "setYear", int.class });
+		map.put(PHD_ID_COLUMN, new Object[] { phdId, "setPhdId", int.class });
+		map.put(DOUBAN_ID_COLUMN, new Object[] { doubanId, "setDoubanId", int.class });
+		map.put(NAME_COLUMN, new Object[] { name, "setName", String.class });
+		map.put(YEAR_COLUMN, new Object[] { year, "setYear", int.class });
 		return map;
 	}
 	private List<String> pks;
