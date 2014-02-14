@@ -15,7 +15,7 @@ local.properties
 .loadpath
 result/**
 target/**
-#mail*.*
+mail*.*
 #config/mail.properties
 #config/jdbc.properties
 src/sql/database_movie.sql
